@@ -1,101 +1,99 @@
-import Image from "next/image";
+'use client';
+import { useState } from 'react';
+import { 
+  HomeIcon, ShoppingCartIcon, CubeIcon, 
+  DocumentTextIcon, ChevronDownIcon, UserIcon, CreditCardIcon, 
+  TruckIcon, CogIcon, ChartBarIcon 
+} from '@heroicons/react/24/outline';
 
-export default function Home() {
+import ProductPage from './src/components/products/product.jsx';
+import OrderPage from './src/components/orders/order.jsx';
+
+export default function QuanLySanPhamDoanhNghiep() {
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState('products'); // Track the active tab
+
+  const products = [
+    { sku: 'SP0041', name: 'Áo khoác da cao cấp', unit: 'chiếc', cost: '1.500.000', price: '3.250.000', stock: '50', image: 'https://picsum.photos/seed/1/40/40', category: 'Quần áo', status: 'Còn hàng' },
+    { sku: 'SP0052', name: 'Tai nghe chống ồn không dây', unit: 'chiếc', cost: '2.000.000', price: '4.500.000', stock: '30', image: 'https://picsum.photos/seed/2/40/40', category: 'Điện tử', status: 'Sắp hết' },
+    { sku: 'SP0063', name: 'Ghế văn phòng công thái học', unit: 'chiếc', cost: '800.000', price: '1.800.000', stock: '100', image: 'https://picsum.photos/seed/3/40/40', category: 'Nội thất', status: 'Còn hàng' },
+    { sku: 'SP0074', name: 'Hệ thống an ninh nhà thông minh', unit: 'bộ', cost: '3.000.000', price: '5.500.000', stock: '20', image: 'https://picsum.photos/seed/4/40/40', category: 'Điện tử', status: 'Còn hàng' },
+    { sku: 'SP0085', name: 'Máy pha cà phê cao cấp', unit: 'chiếc', cost: '500.000', price: '1.200.000', stock: '5', image: 'https://picsum.photos/seed/5/40/40', category: 'Thiết bị gia dụng', status: 'Sắp hết hàng' },
+  ];
+
+  const toggleDropdown = (name: string) => {
+    setOpenDropdown(openDropdown === name ? null : name);
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="flex h-screen bg-gray-100">
+      {/* Sidebar */}
+      <aside className="w-64 bg-gradient-to-b from-indigo-800 to-indigo-900 text-white">
+        <div className="p-6">
+          <div className="flex items-center mb-8">
+            <CubeIcon className="h-8 w-8 mr-3 text-indigo-300" />
+            <span className="text-2xl font-bold">ADMIN</span>
+          </div>
+          <nav className="space-y-1">
+            <button className="flex items-center w-full px-4 py-3 text-sm rounded-lg hover:bg-indigo-700 transition-colors">
+              <HomeIcon className="h-5 w-5 mr-3" />
+              Tổng quan
+            </button>
+            <div>
+              <button 
+                onClick={() => toggleDropdown('BÁN HÀNG')}
+                className="flex items-center justify-between w-full px-4 py-3 text-sm rounded-lg hover:bg-indigo-700 transition-colors"
+              >
+                <div className="flex items-center">
+                  <ShoppingCartIcon className="h-5 w-5 mr-3" />
+                  Bán hàng
+                </div>
+                <ChevronDownIcon className={`h-5 w-5 transform transition ${openDropdown === 'BÁN HÀNG' ? 'rotate-180' : ''}`} />
+              </button>
+              {openDropdown === 'BÁN HÀNG' && (
+                <div className="pl-4 space-y-1">
+                  <button onClick={() => setActiveTab('products')} className={`block w-full text-left px-4 py-2 text-sm rounded-lg hover:bg-indigo-600 ${activeTab === 'products' ? 'bg-indigo-600' : ''}`}>
+                    Quản lý sản phẩm
+                  </button>
+                  <button onClick={() => setActiveTab('orders')} className={`block w-full text-left px-4 py-2 text-sm rounded-lg hover:bg-indigo-600 ${activeTab === 'orders' ? 'bg-indigo-600' : ''}`}>
+                    Quản lý đơn hàng
+                  </button>
+                </div>
+              )}
+            </div>
+            <button className="flex items-center w-full px-4 py-3 text-sm rounded-lg hover:bg-indigo-700 transition-colors">
+              <DocumentTextIcon className="h-5 w-5 mr-3" />
+              Báo cáo
+            </button>
+            <button className="flex items-center w-full px-4 py-3 text-sm rounded-lg hover:bg-indigo-700 transition-colors">
+              <UserIcon className="h-5 w-5 mr-3" />
+              Khách hàng
+            </button>
+            <button className="flex items-center w-full px-4 py-3 text-sm rounded-lg hover:bg-indigo-700 transition-colors">
+              <CreditCardIcon className="h-5 w-5 mr-3" />
+              Thanh toán
+            </button>
+            <button className="flex items-center w-full px-4 py-3 text-sm rounded-lg hover:bg-indigo-700 transition-colors">
+              <TruckIcon className="h-5 w-5 mr-3" />
+              Vận chuyển
+            </button>
+            <button className="flex items-center w-full px-4 py-3 text-sm rounded-lg hover:bg-indigo-700 transition-colors">
+              <CogIcon className="h-5 w-5 mr-3" />
+              Cài đặt
+            </button>
+            <button className="flex items-center w-full px-4 py-3 text-sm rounded-lg hover:bg-indigo-700 transition-colors">
+              <ChartBarIcon className="h-5 w-5 mr-3" />
+              Thống kê
+            </button>
+          </nav>
         </div>
+      </aside>
+
+      {/* Main content */}
+      <main className="flex-grow pl-6 pr-6 pt-1 overflow-y-auto" style={{ backgroundColor: '#ffffff' }}>
+        {activeTab === 'products' && <ProductPage products={products} />}
+        {activeTab === 'orders' && <OrderPage />}
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
   );
 }
